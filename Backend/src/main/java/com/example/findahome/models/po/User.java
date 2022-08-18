@@ -15,16 +15,16 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    //    @NotBlank
-//    @Size(max = 20)
+    @NotBlank
+    @Size(max = 20)
     private String username;
 
-    //    @Size(max=50)
-//    @Email
+    @Size(max = 50)
+    @Email
     private String email;
 
-    //    @NotBlank
-//    @Size(max = 120)
+    @NotBlank
+    @Size(max = 120)
     private String password;
 
     @ManyToMany(fetch = FetchType.LAZY)

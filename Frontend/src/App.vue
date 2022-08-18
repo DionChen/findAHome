@@ -11,8 +11,8 @@
               <li v-if="showAdminBoard" class="nav-item">
                 <router-link to="/admin" class="nav-link">Admin Board</router-link>
               </li>
-              <li v-if="showModeratorBoard" class="nav-item">
-                <router-link to="/mod" class="nav-link">Moderator Board</router-link>
+              <li v-if="showHotelAdminBoard" class="nav-item">
+                <router-link to="/hotel-admin" class="nav-link">Hotel Admin Board</router-link>
               </li>
               <li class="nav-item">
                 <router-link v-if="currentUser" to="/user" class="nav-link">User</router-link>
@@ -70,9 +70,9 @@ export default class App extends Vue {
     }
     return false;
   }
-  get showModeratorBoard(): boolean {
+  get showHotelAdminBoard(): boolean {
     if (this.currentUser && this.currentUser.roles) {
-      return this.currentUser.roles.includes("ROLE_MODERATOR");
+      return this.currentUser.roles.includes("ROLE_HOTEL_ADMIN");
     }
     return false;
   }

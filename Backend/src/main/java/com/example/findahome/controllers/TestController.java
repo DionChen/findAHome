@@ -19,15 +19,15 @@ public class TestController {
 
 
     @GetMapping("/user")
-    @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
+    @PreAuthorize("hasRole('USER') or hasRole('HOTEL_ADMIN') or hasRole('ADMIN')")
     public String userAccess(){
         return "User content.";
     }
 
-    @GetMapping("/mod")
-    @PreAuthorize("hasRole('MODERATOR')")
-    public String moderatorAccess() {
-        return "moderator content.";
+    @GetMapping("/hotel-admin")
+    @PreAuthorize("hasRole('HOTEL_ADMIN')")
+    public String hotelAdminAccess() {
+        return "Hotel admin content.";
     }
 
     @GetMapping("/admin")

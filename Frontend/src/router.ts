@@ -34,9 +34,9 @@ const routes: Array<RouteConfig> = [
     component: () => import('./components/BoardAdmin.vue')
   },
   {
-    path: '/mod',
-    name: 'moderator',
-    component: () => import('./components/BoardModerator.vue')
+    path: '/hotel_admin',
+    name: 'hoteladimn',
+    component: () => import('./components/BoardHotelAdmin.vue')
   },
   {
     path: '/user',

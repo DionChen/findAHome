@@ -3,7 +3,7 @@ const API_URL = '/api/auth';
 class AuthService {
     login(username: string, password: string) {
         return axios
-        .post(API_URL + 'signin', {
+        .post(API_URL + '/signin', {
             username,
             password
         })
@@ -18,7 +18,7 @@ class AuthService {
         localStorage.removeItem('user');
     }
     register(username: string, emal: string, password: string) {
-        return axios.post(API_URL + 'signup', {
+        return axios.post(API_URL + '/signup', {
             username,
             emal,
             password

@@ -3,31 +3,38 @@ import AuthService from '@/services/AuthService';
 const storedUser = localStorage.getItem('user');
 @Module({ namespaced: true })
 class User extends VuexModule {
+
   public status = storedUser ? { loggedIn: true } : { loggedIn: false };
   public user = storedUser ? JSON.parse(storedUser) : null;
+
   @Mutation
   public loginSuccess(user: any): void {
     this.status.loggedIn = true;
     this.user = user;
   }
+
   @Mutation
   public loginFailure(): void {
     this.status.loggedIn = false;
     this.user = null;
   }
+
   @Mutation
   public logout(): void {
     this.status.loggedIn = false;
     this.user = null;
   }
+
   @Mutation
   public registerSuccess(): void {
     this.status.loggedIn = false;
   }
+
   @Mutation
   public registerFailure(): void {
     this.status.loggedIn = false;
   }
+
   @Action({ rawError: true })
   login(data: any): Promise<any> {
     return AuthService.login(data.username, data.password).then(
@@ -45,11 +52,13 @@ class User extends VuexModule {
       }
     );
   }
+
   @Action
   signOut(): void {
     AuthService.logout();
     this.context.commit('logout');
   }
+
   @Action({ rawError: true })
   register(data: any): Promise<any> {
     return AuthService.register(data.username, data.email, data.password).then(
@@ -67,6 +76,7 @@ class User extends VuexModule {
       }
     );
   }
+  
   get isLoggedIn(): boolean {
     return this.status.loggedIn;
   }

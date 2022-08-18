@@ -10,11 +10,11 @@ import { Component, Vue } from "vue-property-decorator";
 import UserService from "@/services/UserService";
 
 @Component
-export default class ModeratorBoard extends Vue {
+export default class HotelAdminBoard extends Vue {
     private content = "";
 
     mounted() {
-        UserService.getModeratorBoard().then(
+        UserService.getHotelAdminBoard().then(
             (response) => {
                 this.content = response.data;
             },
