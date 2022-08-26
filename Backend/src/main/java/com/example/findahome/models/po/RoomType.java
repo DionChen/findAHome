@@ -9,6 +9,7 @@ import lombok.ToString;
 import javax.persistence.*;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 @Entity
 @Table(name = "roomTypes")
@@ -41,7 +42,7 @@ public class RoomType {
     private Double price;
 
     /**
-     * 房間折扣
+     * 房間預設折扣
      */
     private Double discount;
 
@@ -51,14 +52,10 @@ public class RoomType {
     private Integer area;
 
     /**
-     * 可照顧的寵物類別
+     * 可照顧的寵物類別(Key) 數量(value)
      */
     @ElementCollection
-    private List<String> petType;
-    /**
-     * 可容納寵物數量
-     */
-    private Integer num;
+    private Map<String, Integer> petType;
 
     /**
      * 窗戶數目
@@ -69,14 +66,13 @@ public class RoomType {
 
     private Date updatedTime;
 
-    public RoomType(Hotel hotel, String roomName, Double price, Double discount, Integer area, List<String> petType, Integer num, Integer window, Date createdTime, Date updatedTime) {
+    public RoomType(Hotel hotel, String roomName, Double price, Double discount, Integer area, Map<String, Integer> petType, Integer window, Date createdTime, Date updatedTime) {
         this.hotel = hotel;
         this.roomName = roomName;
         this.price = price;
         this.discount = discount;
         this.area = area;
         this.petType = petType;
-        this.num = num;
         this.windows = window;
         this.createdTime = createdTime;
         this.updatedTime = updatedTime;

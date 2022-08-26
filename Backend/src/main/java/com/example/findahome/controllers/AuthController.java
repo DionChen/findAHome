@@ -10,7 +10,7 @@ import com.example.findahome.payload.response.MessageResponse;
 import com.example.findahome.repository.RoleRepository;
 import com.example.findahome.repository.UserRepository;
 import com.example.findahome.security.jwt.JwtUtils;
-import com.example.findahome.services.UserDetailsImpl;
+import com.example.findahome.services.Impl.UserDetailsImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;

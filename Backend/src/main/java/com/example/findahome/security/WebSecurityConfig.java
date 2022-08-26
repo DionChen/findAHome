@@ -2,7 +2,7 @@ package com.example.findahome.security;
 
 import com.example.findahome.security.jwt.AuthEntryPointJwt;
 import com.example.findahome.security.jwt.AuthTokenFilter;
-import com.example.findahome.services.UserDetailsServiceImpl;
+import com.example.findahome.services.Impl.UserDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

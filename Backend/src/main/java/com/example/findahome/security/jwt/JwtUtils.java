@@ -1,6 +1,6 @@
 package com.example.findahome.security.jwt;
 
-import com.example.findahome.services.UserDetailsImpl;
+import com.example.findahome.services.Impl.UserDetailsImpl;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;

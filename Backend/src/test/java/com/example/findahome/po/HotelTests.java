@@ -13,9 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -28,13 +26,13 @@ public class HotelTests {
     RoomTypeRepository roomTypeRepository;
 
     /**
-     * create test
+     * create Hotel
      */
     @Test
     @Order(1)
     public void createHotel() {
         Hotel newHotel = new Hotel("TestHotel",
-                "test address",4.5,"test hotel");
+                "test address", 4.5, "test hotel");
         hotelRepository.save(newHotel);
         Hotel searchHotel = hotelRepository.findByName("TestHotel").get(0);
         Assert.assertEquals("TestHotel", searchHotel.getName());
@@ -45,23 +43,24 @@ public class HotelTests {
     }
 
     /**
-     * create roomType
+     * create room
      */
     @Test
     @Order(2)
     public void createRoom() {
         Date now = new Date();
-        Hotel hotel = new Hotel("TestHotel2", "test address",4.5,"test hotel 2");
+        Hotel hotel = new Hotel("TestHotel2", "test address", 4.5, "test hotel 2");
         hotelRepository.save(hotel);
-        List<String> pets = new ArrayList<String>();
-        pets.add("dog");
-        pets.add("cat");
-        RoomType room = new RoomType(hotel, "Double bed room",100.0,0.8,100,pets,2,1,now, now);
+        Map<String, Integer> pets = new HashMap<>();
+        pets.put("dog", 2);
+        pets.put("cate", 3);
+
+        RoomType room = new RoomType(hotel, "Double bed room", 100.0, 0.8, 100, pets, 1, now, now);
         roomTypeRepository.save(room);
         Hotel roomHotel = hotelRepository.findByName("TestHotel2").get(0);
         RoomType searchRoom = roomTypeRepository.findByHotel(hotel).get(0);
-        Assert.assertEquals("Double bed room",searchRoom.getRoomName());
-        Assert.assertEquals(roomHotel,searchRoom.getHotel());
+        Assert.assertEquals("Double bed room", searchRoom.getRoomName());
+        Assert.assertEquals(roomHotel, searchRoom.getHotel());
     }
 
     @Test
