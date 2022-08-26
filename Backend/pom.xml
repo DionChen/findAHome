@@ -93,8 +93,23 @@
             <artifactId>junit</artifactId>
             <scope>test</scope>
         </dependency>
+        <!--test for webflux -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-r2dbc</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-webflux</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.r2dbc</groupId>
+            <artifactId>r2dbc-postgresql</artifactId>
+            <version>0.8.12.RELEASE</version>
+            <scope>runtime</scope>
+        </dependency>
+        <!--test for webflux -->
     </dependencies>
-
     <build>
         <plugins>
             <plugin>

@@ -1,4 +1,4 @@
-package com.example.findahome.services;
+package com.example.findahome.services.Impl;
 
 import com.example.findahome.models.po.User;
 import com.fasterxml.jackson.annotation.JsonIgnore;

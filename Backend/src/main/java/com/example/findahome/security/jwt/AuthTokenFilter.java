@@ -1,6 +1,6 @@
 package com.example.findahome.security.jwt;
 
-import com.example.findahome.services.UserDetailsServiceImpl;
+import com.example.findahome.services.Impl.UserDetailsServiceImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
