@@ -1,47 +1,49 @@
 import Vue from 'vue';
 import VueRouter, { RouteConfig } from "vue-router";
-import Home from '@/components/Home.vue';
-import Login from '@/components/Login.vue';
-import Register from '@/components/Register.vue';
+import Home from '@/components/front/pages/Home.vue';
+import BackstageHome from '@/components/backstage/pages/BackstageHome.vue';
+import Login from '@/components/backstage/pages/Login.vue';
+import Register from '@/components/backstage/pages/Register.vue';
 Vue.use(VueRouter);
 const routes: Array<RouteConfig> = [
   {
     path: '/',
-    name: 'home',
+    name: 'Home',
     component: Home
   },
   {
-    path: '/home',
-    component: Home
+    path: '/console',
+    name: 'BackstageHome',
+    component: BackstageHome
   },
   {
-    path: '/login',
+    path: '/console/login',
     component: Login
   },
   {
-    path: '/register',
+    path: '/console/register',
     component: Register
   },
   {
-    path: '/profile',
+    path: 'console/profile',
     name: 'profile',
     // lazy-loaded
-    component: () => import('./components/Profile.vue')
+    component: () => import('./components/backstage/pages/Profile.vue')
   },
   {
-    path: '/admin',
+    path: 'console/admin',
     name: 'admin',
-    component: () => import('./components/BoardAdmin.vue')
+    component: () => import('./components/backstage/pages/BoardAdmin.vue')
   },
   {
-    path: '/hotel_admin',
+    path: 'console/hotel_admin',
     name: 'hoteladimn',
-    component: () => import('./components/BoardHotelAdmin.vue')
+    component: () => import('./components/backstage/pages/BoardHotelAdmin.vue')
   },
   {
-    path: '/user',
+    path: 'console/user',
     name: 'user',
-    component: () => import('./components/BoardUser.vue')
+    component: () => import('./components/backstage/pages/BoardUser.vue')
   }
 ];
 

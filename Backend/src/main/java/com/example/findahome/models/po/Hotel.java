@@ -5,6 +5,8 @@ import lombok.EqualsAndHashCode;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import java.util.Map;
 import java.util.Set;
 
 @Entity
@@ -15,6 +17,13 @@ public class Hotel {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+
+
+    /**
+     * 飯店建立者
+     */
+    @NotNull
+    private Long userId;
 
     /**
      * 飯店名稱
@@ -31,11 +40,13 @@ public class Hotel {
     /**
      * 飯店評等
      */
+    @NotNull
     private Double rating;
 
     /**
      * 飯店簡介
      */
+    @NotBlank
     private String summary;
 
     /**
@@ -49,20 +60,18 @@ public class Hotel {
 
     /**
      * 飯店設施
-     * 在考慮可能不需要多拆出個table
      */
-    @EqualsAndHashCode.Exclude
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(name = "hotel_facilities",
-            joinColumns = @JoinColumn(name = "hotel_id"),
-            inverseJoinColumns = @JoinColumn(name = "facility_id"))
-    private Set<HotelFacility> facilities;
+    @NotBlank
+    private String facilities;
 
-    public Hotel(String name, String address, Double rating, String summary) {
+
+    public Hotel(String name, Long userId, String address, Double rating, String summary ,String facilities) {
         this.name = name;
+        this.userId = userId;
         this.address = address;
         this.rating = rating;
         this.summary = summary;
+        this.facilities = facilities;
     }
 
     public Hotel() {

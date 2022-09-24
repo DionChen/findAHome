@@ -24,7 +24,6 @@ public class RoomType {
     /**
      * Hotel Id
      */
-
     @EqualsAndHashCode.Exclude
     @ToString.Exclude
     @ManyToOne
@@ -66,7 +65,7 @@ public class RoomType {
 
     private Date updatedTime;
 
-    public RoomType(Hotel hotel, String roomName, Double price, Double discount, Integer area, Map<String, Integer> petType, Integer window, Date createdTime, Date updatedTime) {
+    public RoomType(Hotel hotel,String roomName, Double price, Double discount, Integer area, Map<String, Integer> petType, Integer window, Date createdTime, Date updatedTime) {
         this.hotel = hotel;
         this.roomName = roomName;
         this.price = price;

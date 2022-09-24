@@ -31,8 +31,8 @@ public class HotelTests {
     @Test
     @Order(1)
     public void createHotel() {
-        Hotel newHotel = new Hotel("TestHotel",
-                "test address", 4.5, "test hotel");
+        Hotel newHotel = new Hotel("TestHotel",1L,
+                "test address", 4.5, "test hotel", "table;chair");
         hotelRepository.save(newHotel);
         Hotel searchHotel = hotelRepository.findByName("TestHotel").get(0);
         Assert.assertEquals("TestHotel", searchHotel.getName());
@@ -48,8 +48,9 @@ public class HotelTests {
     @Test
     @Order(2)
     public void createRoom() {
+
         Date now = new Date();
-        Hotel hotel = new Hotel("TestHotel2", "test address", 4.5, "test hotel 2");
+        Hotel hotel = new Hotel("TestHotel2", 1L, "test address", 4.5, "test hotel 2", "table;chair");
         hotelRepository.save(hotel);
         Map<String, Integer> pets = new HashMap<>();
         pets.put("dog", 2);

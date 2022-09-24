@@ -4,11 +4,12 @@ import lombok.Data;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.time.Instant;
 import java.util.Date;
 
 @Entity
-@Table(name = "orders")
+@Table(name = "orders", indexes = @Index(name = "ri_index", columnList = "roomId"))
 @Data
 public class Order {
 
@@ -17,21 +18,15 @@ public class Order {
     private Integer id;
 
     /**
-     * 訂單序號
-     */
-    @NotBlank
-    private String seqNum;
-
-    /**
      * 使用者ID
      */
-    @NotBlank
+    @NotNull
     private Long userId;
 
     /**
      * 房型ID
      */
-    @NotBlank
+    @NotNull
     private Integer roomId;
 
     /**
@@ -49,41 +44,40 @@ public class Order {
     /**
      * 訂購日期（起）
      */
-    @NotBlank
+    @NotNull
     private Instant startDate;
 
     /**
      * 訂購日期（迄）
      */
-    @NotBlank
+    @NotNull
     private Instant endDate;
 
     /**
      * 訂單狀態
      */
-    @NotBlank
+    @NotNull
     private Integer status;
 
     /**
      * 訂單費用
      */
-    @NotBlank
+    @NotNull
     private Integer cost;
 
     /**
      * 訂單建立日期
      */
-    @NotBlank
+    @NotNull
     private Date createdTime;
 
     /**
      * 更新日期
      */
-    @NotBlank
+    @NotNull
     private Date updatedTime;
 
-    public Order(String seqNum, Long userId, Integer roomId, String name, String phone, Instant startDate, Instant endDate, Integer status, Integer cost, Date createdTime, Date updatedTime) {
-        this.seqNum = seqNum;
+    public Order(Long userId, Integer roomId, String name, String phone, Instant startDate, Instant endDate, Integer status, Integer cost, Date createdTime, Date updatedTime) {
         this.userId = userId;
         this.roomId = roomId;
         this.name = name;

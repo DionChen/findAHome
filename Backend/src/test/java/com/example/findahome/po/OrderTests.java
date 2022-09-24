@@ -28,13 +28,11 @@ public class OrderTests {
         Instant startDate = new Date().toInstant();
         Instant endDate = new Date().toInstant();
         Date createdDate = new Date();
-        Order newOrder = new Order(
-                "123", 123L, 123, "test order", "0912345678", startDate, endDate, 1, 100, createdDate, createdDate
+        Order newOrder = new Order(123L, 123, "test order", "0912345678", startDate, endDate, 1, 100, createdDate, createdDate
         );
         orderRepository.save(newOrder);
-        Order goalOrder = orderRepository.findBySeqNum("123").get(0);
+        Order goalOrder = orderRepository.findByUserId(123L).get(0);
         Assert.assertNotNull(goalOrder);
-        Assert.assertEquals("123", goalOrder.getSeqNum());
         Assert.assertEquals("test order", goalOrder.getName());
         Assert.assertEquals("0912345678", goalOrder.getPhone());
         Assert.assertEquals(startDate, goalOrder.getStartDate());

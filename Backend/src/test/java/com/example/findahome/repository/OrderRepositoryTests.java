@@ -1,6 +1,8 @@
 package com.example.findahome.repository;
 
+import com.example.findahome.models.po.Hotel;
 import com.example.findahome.models.po.Order;
+import com.example.findahome.models.po.RoomType;
 import org.assertj.core.api.Assertions;
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
@@ -10,6 +12,11 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 
 import java.time.Instant;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import static org.assertj.core.util.DateUtil.now;
 
 @DataJpaTest
 public class OrderRepositoryTests {
@@ -19,29 +26,136 @@ public class OrderRepositoryTests {
     //Intellij的bug 會顯示錯誤，但能正常運行
 
     @Autowired
-    private  OrderRepository orderRepository;
+    private RoomTypeRepository roomTypeRepository;
+
+    @Autowired
+    private OrderRepository orderRepository;
+
+    //findByUserId
+    @Test
+    public void getOrderByUserId() {
+        Hotel hotel = new Hotel("TestHotel", 1L, "address", 5.0, "test hotel repository", "table;chair");
+
+        Map<String, Integer> pets = new HashMap<>();
+        pets.put("dog", 10);
+        RoomType roomType = new RoomType(hotel, "Double bed room", 100.0, 0.8, 100, pets, 1, now(), now());
+        Instant orderStartDate = Instant.parse("2022-09-07T00:00:00.00Z");
+        Instant orderEndDate = Instant.parse("2022-09-10T00:00:00.00Z");
+
+        this.entityManager.persist(hotel);
+        this.entityManager.persist(roomType);
+        Order order = new Order(1L, roomTypeRepository.findByRoomName("Double bed room").get(0).getId(), "test order", "0912345678", orderStartDate, orderEndDate, 1, 100, now(), now());
+        this.entityManager.persist(order);
+
+        List<Order> result = orderRepository.findByUserId(1L);
+        Assert.assertFalse(result.isEmpty());
+        Assert.assertEquals("test order", result.get(0).getName());
+        Assert.assertEquals("0912345678", result.get(0).getPhone());
+    }
 
     @Test
-    public  void getOrderBySeqNum() {
-        Instant startDate = new Date().toInstant();
-        Instant endDate = new Date().toInstant();
-        Date createdDate = new Date();
-        Order newOrder = new Order(
-                "123", 123L, 123, "test order", "0912345678", startDate, endDate, 1, 100, createdDate, createdDate
-        );
-        this.entityManager.persist(newOrder);
-        Order searchOrder = orderRepository.findBySeqNum("123").get(0);
-        Assert.assertNotNull(searchOrder);
-        Assertions.assertThat(searchOrder).hasFieldOrPropertyWithValue("seqNum", "123");
-        Assertions.assertThat(searchOrder).hasFieldOrPropertyWithValue("userId", 123L);
-        Assertions.assertThat(searchOrder).hasFieldOrPropertyWithValue("roomId", 123);
-        Assertions.assertThat(searchOrder).hasFieldOrPropertyWithValue("name", "test order");
-        Assertions.assertThat(searchOrder).hasFieldOrPropertyWithValue("phone", "0912345678");
-        Assertions.assertThat(searchOrder).hasFieldOrPropertyWithValue("startDate", startDate);
-        Assertions.assertThat(searchOrder).hasFieldOrPropertyWithValue("endDate", endDate);
-        Assertions.assertThat(searchOrder).hasFieldOrPropertyWithValue("status", 1);
-        Assertions.assertThat(searchOrder).hasFieldOrPropertyWithValue("cost", 100);
-        Assertions.assertThat(searchOrder).hasFieldOrPropertyWithValue("createdTime", createdDate);
-        Assertions.assertThat(searchOrder).hasFieldOrPropertyWithValue("updatedTime", createdDate);
+    public void getOrderByErrorUserId() {
+        Long errorUserId = 1000L;
+        Hotel hotel = new Hotel("TestHotel", 1L, "address", 5.0, "test hotel repository", "table;chair");
+
+        Map<String, Integer> pets = new HashMap<>();
+        pets.put("dog", 10);
+        RoomType roomType = new RoomType(hotel, "Double bed room", 100.0, 0.8, 100, pets, 1, now(), now());
+        Instant orderStartDate = Instant.parse("2022-09-07T00:00:00.00Z");
+        Instant orderEndDate = Instant.parse("2022-09-10T00:00:00.00Z");
+
+        this.entityManager.persist(hotel);
+        this.entityManager.persist(roomType);
+        Order order = new Order(1L, roomTypeRepository.findByRoomName("Double bed room").get(0).getId(), "test order", "0912345678", orderStartDate, orderEndDate, 1, 100, now(), now());
+        this.entityManager.persist(order);
+
+        List<Order> result = orderRepository.findByUserId(errorUserId);
+        Assert.assertTrue(result.isEmpty());
+    }
+
+    //findByRoomId
+    @Test
+    public void getOrderByRoomId() {
+        Hotel hotel = new Hotel("TestHotel", 1L, "address", 5.0, "test hotel repository", "table;chair");
+
+        Map<String, Integer> pets = new HashMap<>();
+        pets.put("dog", 10);
+        RoomType roomType = new RoomType(hotel, "Double bed room", 100.0, 0.8, 100, pets, 1, now(), now());
+        Instant orderStartDate = Instant.parse("2022-09-07T00:00:00.00Z");
+        Instant orderEndDate = Instant.parse("2022-09-10T00:00:00.00Z");
+
+        this.entityManager.persist(hotel);
+        this.entityManager.persist(roomType);
+        Order order = new Order(1L, roomTypeRepository.findByRoomName("Double bed room").get(0).getId(), "test order", "0912345678", orderStartDate, orderEndDate, 1, 100, now(), now());
+        this.entityManager.persist(order);
+
+        List<Order> result = orderRepository.findByRoomId(roomType.getId());
+        Assert.assertFalse(result.isEmpty());
+        Assert.assertEquals("test order", result.get(0).getName());
+        Assert.assertEquals("0912345678", result.get(0).getPhone());
+    }
+
+    //findByRoomId
+    @Test
+    public void getOrderByErrorRoomId() {
+        Integer errorRoomId = 1000;
+        Hotel hotel = new Hotel("TestHotel", 1L, "address", 5.0, "test hotel repository", "table;chair");
+
+        Map<String, Integer> pets = new HashMap<>();
+        pets.put("dog", 10);
+        RoomType roomType = new RoomType(hotel, "Double bed room", 100.0, 0.8, 100, pets, 1, now(), now());
+        Instant orderStartDate = Instant.parse("2022-09-07T00:00:00.00Z");
+        Instant orderEndDate = Instant.parse("2022-09-10T00:00:00.00Z");
+
+        this.entityManager.persist(hotel);
+        this.entityManager.persist(roomType);
+        Order order = new Order(1L, roomTypeRepository.findByRoomName("Double bed room").get(0).getId(), "test order", "0912345678", orderStartDate, orderEndDate, 1, 100, now(), now());
+        this.entityManager.persist(order);
+
+        List<Order> result = orderRepository.findByRoomId(errorRoomId);
+        Assert.assertTrue(result.isEmpty());
+
+    }
+
+    //findByHotelId
+    @Test
+    public void getOrderByHotelId() {
+        Hotel hotel = new Hotel("TestHotel", 1L, "address", 5.0, "test hotel repository", "table;chair");
+
+        Map<String, Integer> pets = new HashMap<>();
+        pets.put("dog", 10);
+        RoomType roomType = new RoomType(hotel, "Double bed room", 100.0, 0.8, 100, pets, 1, now(), now());
+        Instant orderStartDate = Instant.parse("2022-09-07T00:00:00.00Z");
+        Instant orderEndDate = Instant.parse("2022-09-10T00:00:00.00Z");
+
+        this.entityManager.persist(hotel);
+        this.entityManager.persist(roomType);
+        Order order = new Order(1L, roomTypeRepository.findByRoomName("Double bed room").get(0).getId(), "test order", "0912345678", orderStartDate, orderEndDate, 1, 100, now(), now());
+        this.entityManager.persist(order);
+
+        List<Order> orderList = orderRepository.findByHotelId(hotel.getId());
+        Assert.assertFalse(orderList.isEmpty());
+        Assert.assertEquals("test order", orderList.get(0).getName());
+        Assert.assertEquals("0912345678", orderList.get(0).getPhone());
+    }
+
+    @Test
+    public void getOrderByErrorHotelId() {
+        Integer errorHotelId = 1000;
+        Hotel hotel = new Hotel("TestHotel", 1L, "address", 5.0, "test hotel repository", "table;chair");
+
+        Map<String, Integer> pets = new HashMap<>();
+        pets.put("dog", 10);
+        RoomType roomType = new RoomType(hotel, "Double bed room", 100.0, 0.8, 100, pets, 1, now(), now());
+        Instant orderStartDate = Instant.parse("2022-09-07T00:00:00.00Z");
+        Instant orderEndDate = Instant.parse("2022-09-10T00:00:00.00Z");
+
+        this.entityManager.persist(hotel);
+        this.entityManager.persist(roomType);
+        Order order = new Order(1L, roomTypeRepository.findByRoomName("Double bed room").get(0).getId(), "test order", "0912345678", orderStartDate, orderEndDate, 1, 100, now(), now());
+        this.entityManager.persist(order);
+
+        List<Order> orderList = orderRepository.findByHotelId(errorHotelId);
+        Assert.assertTrue(orderList.isEmpty());
     }
 }
