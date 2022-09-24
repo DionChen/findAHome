@@ -1,6 +1,8 @@
 package com.example.findahome.controllers;
 
+import com.example.findahome.models.dto.UpdateOrderDto;
 import com.example.findahome.models.dto.UserOrderDto;
+import com.example.findahome.models.enums.OrderStatus;
 import com.example.findahome.models.po.Order;
 import com.example.findahome.services.Impl.OrderServiceImpl;
 import com.example.findahome.services.Impl.UserDetailsImpl;
@@ -26,8 +28,13 @@ public class OrderController {
     @PostMapping
     public ResponseEntity<Order> createOrder(@Valid @RequestBody UserOrderDto userOrderDto, @AuthenticationPrincipal UserDetailsImpl user) {
         Date now = new Date();
-        Order newOrder = new Order(user.getId(), userOrderDto.getRoomId(), userOrderDto.getName(), userOrderDto.getPhone(), Instant.parse(userOrderDto.getStartDate()), Instant.parse(userOrderDto.getEndDate()), 1, userOrderDto.getCost(), now, now);
+        Order newOrder = new Order(user.getId(), userOrderDto.getRoomId(), userOrderDto.getName(), userOrderDto.getPhone(), Instant.parse(userOrderDto.getStartDate()), Instant.parse(userOrderDto.getEndDate()), OrderStatus.UNPAID.getStatusNum(), userOrderDto.getCost(), now, now);
         return ResponseEntity.ok(orderService.create(newOrder));
+    }
+
+    @PutMapping("{orderId}")
+    public ResponseEntity<Order> updateOrder(@Valid @RequestBody UpdateOrderDto updateOrderDto, @PathVariable Integer orderId) {
+        return ResponseEntity.ok(orderService.findOneAndUpdate(updateOrderDto,orderId));
     }
 
     @GetMapping("/list")
@@ -54,5 +61,6 @@ public class OrderController {
     public ResponseEntity<Order> softDeleteOrder(@PathVariable Integer id) {
         return ResponseEntity.ok(orderService.softDelete(id));
     }
+
 
 }

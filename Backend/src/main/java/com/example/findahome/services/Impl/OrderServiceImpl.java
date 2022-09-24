@@ -1,5 +1,7 @@
 package com.example.findahome.services.Impl;
 
+import com.example.findahome.models.dto.UpdateOrderDto;
+import com.example.findahome.models.enums.OrderStatus;
 import com.example.findahome.models.exception.ApiNotFoundException;
 import com.example.findahome.models.po.Order;
 import com.example.findahome.repository.HotelRepository;
@@ -11,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -55,11 +58,36 @@ public class OrderServiceImpl implements OrderService {
         return orderRepository.findAll();
     }
 
+    public Order findOneAndUpdate(UpdateOrderDto data, Integer orderId) {
+        Date now = new Date();
+        Optional<Order> order = orderRepository.findById(orderId);
+        if(order.isPresent()) {
+            order.get().setName(data.getName());
+            order.get().setPhone(data.getPhone());
+            order.get().setUpdatedTime(now);
+            return orderRepository.save(order.get());
+        }else {
+            throw new ApiNotFoundException("Could not find the Order with id =" + orderId);
+        }
+    }
+
+    public Order updateOrderStatus(Integer status, Integer orderId) {
+        Date now = new Date();
+        Optional<Order> order = orderRepository.findById(orderId);
+        if(order.isPresent()) {
+            order.get().setStatus(status);
+            order.get().setUpdatedTime(now);
+            return orderRepository.save(order.get());
+        }else {
+            throw new ApiNotFoundException("Could not find the Order with id =" + orderId);
+        }
+    }
+
     public Order softDelete(Integer id) {
         Optional<Order> order = orderRepository.findById(id);
         if (order.isPresent()) {
-            order.get().setStatus(3);
-            return order.get();
+            order.get().setStatus(OrderStatus.DELETE.getStatusNum());
+            return orderRepository.save(order.get());
         } else
             throw new ApiNotFoundException("Can't find Order " + id);
     }

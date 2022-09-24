@@ -1,7 +1,9 @@
 package com.example.findahome.controller;
 
 import com.example.findahome.controllers.OrderController;
+import com.example.findahome.models.dto.UpdateOrderDto;
 import com.example.findahome.models.dto.UserOrderDto;
+import com.example.findahome.models.enums.OrderStatus;
 import com.example.findahome.models.po.Order;
 import com.example.findahome.models.po.User;
 import com.example.findahome.security.MockSpringSecurityFilter;
@@ -26,6 +28,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import static java.time.LocalTime.now;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.when;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
@@ -58,7 +61,6 @@ public class OrderControllerTests {
     }
 
     @Test
-    //Auth一直無法過，之後再試試
     public void createOrder() throws Exception {
 
 
@@ -74,12 +76,34 @@ public class OrderControllerTests {
                         .principal(new UsernamePasswordAuthenticationToken(new User(), null))
                         .content(mapper.writeValueAsString(orderBody))
                         .contentType(MediaType.APPLICATION_JSON))
-                        .andExpect(status().isOk());
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    public void updateOrder() throws Exception {
+        Date now = new Date();
+        String name = "test";
+        String phone = "0987654321";
+        Integer orderId = 100;
+        UpdateOrderDto data = new UpdateOrderDto();
+        data.setPhone(phone);
+        data.setName(name);
+        when(orderService.findOneAndUpdate(any(UpdateOrderDto.class), eq(orderId))).thenReturn(new Order(123L, 100, name, phone, Instant.now(), Instant.now(), OrderStatus.UNPAID.getStatusNum(), 100, now, now));
+        this.mockMvc.perform(put("/order/" + orderId)
+                        .principal(new UsernamePasswordAuthenticationToken(new User(), null))
+                        .content(mapper.writeValueAsString(data))
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.userId").value(123L))
+                .andExpect(jsonPath("$.name").value(name))
+                .andExpect(jsonPath("$.phone").value(phone))
+                .andExpect(jsonPath("$.status").value(OrderStatus.UNPAID.getStatusNum()))
+                .andExpect(jsonPath("$.cost").value(100));
     }
 
     //get All orderList
     @Test
-    public void getOrderList() throws Exception{
+    public void getOrderList() throws Exception {
         Instant startDate = new Date().toInstant();
         Instant endDate = new Date().toInstant();
         Date createdDate = new Date();
@@ -98,7 +122,7 @@ public class OrderControllerTests {
 
     //get Order List By user Id
     @Test
-    public void getOrderListByUserId() throws Exception{
+    public void getOrderListByUserId() throws Exception {
         Long userId = 1L;
         Instant startDate = new Date().toInstant();
         Instant endDate = new Date().toInstant();
@@ -120,7 +144,7 @@ public class OrderControllerTests {
 
     //get Order List By hotel Id
     @Test
-    public void getOrderListByHotelId() throws Exception{
+    public void getOrderListByHotelId() throws Exception {
         Integer hotelId = 100;
         Instant startDate = new Date().toInstant();
         Instant endDate = new Date().toInstant();
@@ -141,7 +165,7 @@ public class OrderControllerTests {
 
     //get Order List By room Id
     @Test
-    public void getOrderListByRoomId() throws Exception{
+    public void getOrderListByRoomId() throws Exception {
         Integer roomId = 100;
         Instant startDate = new Date().toInstant();
         Instant endDate = new Date().toInstant();

@@ -5,6 +5,7 @@ package com.example.findahome.models.enums;
  * Order states
  */
 public enum OrderStatus {
+    DELETE(0, "Delete"),
     CANCELLATION(1, "cancellation"),
     UNPAID(2, "unpaid"),
     PAID(3, "paid"),
