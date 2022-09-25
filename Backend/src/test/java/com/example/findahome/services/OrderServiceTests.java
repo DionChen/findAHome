@@ -1,5 +1,7 @@
 package com.example.findahome.services;
 
+import com.example.findahome.models.dto.UpdateOrderDto;
+import com.example.findahome.models.enums.OrderStatus;
 import com.example.findahome.models.exception.ApiNotFoundException;
 import com.example.findahome.models.po.Hotel;
 import com.example.findahome.models.po.Order;
@@ -24,6 +26,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
 
@@ -73,6 +76,56 @@ public class OrderServiceTests {
         Assert.assertEquals("Could not find the room with id =" + invalidRoomIdOrder.getRoomId(), roomIdErrorMessage.getMessage());
         Exception roomUnavailableErrorMessage = Assert.assertThrows(ApiNotFoundException.class, () -> orderService.create(noAvailableOrder));
         Assert.assertEquals("Sorry, we have no rooms at this property on your dates.", roomUnavailableErrorMessage.getMessage());
+
+    }
+
+    @Test
+    public void findOneAndUpdate() {
+        Date now = new Date();
+        Integer orderId = 100;
+        UpdateOrderDto data = new UpdateOrderDto();
+        when(orderRepository.findById(orderId)).thenReturn(Optional.of(new Order()));
+        when(orderRepository.save(any(Order.class))).thenReturn(new Order(123L, 100, "test", "0987654321", Instant.now(), Instant.now(), OrderStatus.UNPAID.getStatusNum(),100, now, now));
+        Order updateOrder = orderService.findOneAndUpdate(data, orderId);
+        Assert.assertNotNull(updateOrder);
+        Assert.assertEquals("test", updateOrder.getName());
+        Assert.assertEquals("0987654321", updateOrder.getPhone());
+
+    }
+
+    @Test
+    public void findOneAndUpdateWithErrorId() {
+        Date now = new Date();
+        Integer orderId = 100;
+        Integer errorOrderId = 1000;
+        UpdateOrderDto data = new UpdateOrderDto();
+        when(orderRepository.findById(orderId)).thenReturn(Optional.of(new Order()));
+        when(orderRepository.save(any(Order.class))).thenReturn(new Order(123L, 100, "test", "0987654321", Instant.now(), Instant.now(), OrderStatus.UNPAID.getStatusNum(),100, now, now));
+       Exception invalidOrderIdMessage = Assert.assertThrows( ApiNotFoundException.class, () -> orderService.findOneAndUpdate(data, errorOrderId));
+       Assert.assertEquals("Could not find the Order with id =" + errorOrderId, invalidOrderIdMessage.getMessage());
+    }
+
+    @Test
+    public void updateOrderStatus() {
+        Date now = new Date();
+        when(orderRepository.findById(1000)).thenReturn(Optional.of(new Order()));
+        when(orderRepository.save(any(Order.class))).thenReturn(new Order(123L, 100, "test", "0987654321", Instant.now(), Instant.now(), OrderStatus.UNPAID.getStatusNum(),100, now, now));
+        Order updateOrder = orderService.updateOrderStatus(OrderStatus.CANCELLATION.getStatusNum(), 1000);
+        Assert.assertNotNull(updateOrder);
+        Assert.assertEquals("test", updateOrder.getName());
+        Assert.assertEquals("0987654321", updateOrder.getPhone());
+
+    }
+
+    @Test
+    public void updateOrderStatusWithErrorOrderId() {
+        Date now = new Date();
+        Integer errorOrderId = 100;
+        when(orderRepository.findById(1000)).thenReturn(Optional.of(new Order()));
+        when(orderRepository.save(any(Order.class))).thenReturn(new Order(123L, 100, "test", "0987654321", Instant.now(), Instant.now(), OrderStatus.UNPAID.getStatusNum(),100, now, now));
+
+        Exception invalidOrderIdMessage = Assert.assertThrows( ApiNotFoundException.class, () -> orderService.updateOrderStatus(OrderStatus.CANCELLATION.getStatusNum(), errorOrderId));
+        Assert.assertEquals("Could not find the Order with id =" + errorOrderId, invalidOrderIdMessage.getMessage());
 
     }
 
