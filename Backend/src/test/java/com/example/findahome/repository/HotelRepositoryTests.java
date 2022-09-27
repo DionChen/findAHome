@@ -32,7 +32,6 @@ public class HotelRepositoryTests {
 
         this.entityManager.persist(new Hotel("TestHotelRepo", 1L, "address", 5.0, "test hotel repository","table;chair"));
         Hotel hotel = hotelRepository.findByName("TestHotelRepo").get(0);
-        System.out.println(hotel);
         Assert.assertNotNull(hotel);
         Assert.assertEquals("TestHotelRepo", hotel.getName());
         Assert.assertEquals("address", hotel.getAddress());

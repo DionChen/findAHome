@@ -85,8 +85,8 @@
               height="250px"
               class="custom-carousel"
             >
-              <el-carousel-item v-for="news in 6" :key="news">
-                <h3 class="medium">{{ news }}</h3>
+              <el-carousel-item v-for="(news,key) in news" :key="key">
+                <img :src="news" class="medium" />
               </el-carousel-item>
             </el-carousel>
           </el-col>
@@ -101,18 +101,19 @@
         <el-row class="sug-card">
           <el-col
             :span="5"
-            v-for="(suggestion, index) in 4"
-            :key="index"
-            :offset="index > 0 ? 1 : 0"
+            v-for="(suggestion, key) in suggestion"
+            :key="key"
+            :offset="key > 0 ? 1 : 0"
           >
             <el-card :body-style="{ padding: '0px' }">
-              <img :src="suggestion" class="image" />
-              <div style="padding: 14px">
-                <span>Yummy hamburger{{index}}</span>
+              <img :src="suggestion.img" class="suggest-image" />
+              <div style="padding: 14px" class="suggest">
+                <span>{{suggestion.title}}</span>
                 <div class="bottom clearfix"></div>
               </div>
             </el-card>
           </el-col>
+          
         </el-row>
       </el-main>
       <el-footer>
@@ -134,13 +135,10 @@ import axios from "axios";
   },
 })
 export default class Home extends Vue {
-  //data
-  //search data
   search = "";
   date = "";
   num = 1;
   type = "";
-  //front-data
   title = "";
   bannerImg = "";
   newsTitle = "";
@@ -238,11 +236,27 @@ export default class Home extends Vue {
   background-color: #d3dce6;
   border-radius: 30px 30px 30px 30px;
 }
+.medium {
+    width: 100%;
+   height: 100%;
+   display: block;
+}
+.suggest-image {
+   width: 100%;
+   min-height: 290px;
+   height: 100%;
+   display: block;
+}
+.suggest span {
+ font-family: "微软雅黑";
+  color: #303030;
+  font-size: 15px;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
 
 .el-footer {
-  /* position: fixed;
-  bottom: 0px;
-  left: 0px; */
   width: 100%;
   background-color: #b3c0d1;
   color: #333;

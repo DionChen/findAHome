@@ -7,6 +7,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -18,7 +19,7 @@ public class FrontDataController {
     FrontDataRepository frontDataRepository;
 
     @GetMapping("/landing")
-    public String LandingData() {
+    public String getLandingData() {
         FrontData landData = frontDataRepository.findAll().get(0);
         if(landData != null) {
             Gson gson = new Gson();
@@ -26,4 +27,9 @@ public class FrontDataController {
         }else
             return "";
     }
+
+//    @PostMapping("/landing")
+//    public String createLandingData() {
+//
+//    }
 }
