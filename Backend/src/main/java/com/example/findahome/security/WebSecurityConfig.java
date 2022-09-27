@@ -92,7 +92,7 @@ public class WebSecurityConfig {
                 .antMatchers("/order/**").permitAll()
                 .antMatchers("/hotel/**").permitAll()
                 //先暫時用的，之後要所有user登入的才能使用
-                .antMatchers("/", "/favicon.ico", "/**/*.png", "/**/*.gif", "/**/*.svg", "/**/*.jpg", "/**/*.html", "/**/*.css", "/**/*.js").permitAll()
+                .antMatchers("/", "/favicon.ico", "/**/*.png", "/**/*.gif", "/**/*.svg", "/**/*.jpg", "/**/*.html", "/**/*.css", "/**/*.js", "**/*.woff", "/**/*.ttf").permitAll()
                 .anyRequest().authenticated();
         http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
         return http.build();

@@ -17,9 +17,9 @@ public class LandingJson {
 
     private String suggestedTitle;
 
-    private List<String> suggestion;
+    private List<Object> suggestion;
 
-    public LandingJson(String title, String bannerImg, String newsTitle, List<String> news, String suggestedTitle, List<String> suggestion) {
+    public LandingJson(String title, String bannerImg, String newsTitle, List<String> news, String suggestedTitle, List<Object> suggestion) {
         this.title = title;
         this.bannerImg = bannerImg;
         this.newsTitle = newsTitle;
