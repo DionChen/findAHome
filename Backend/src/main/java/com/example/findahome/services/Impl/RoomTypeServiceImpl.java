@@ -41,10 +41,10 @@ public class RoomTypeServiceImpl implements RoomTypeService {
         return roomTypeRepository.findAll();
     }
 
-    public RoomType findAvailableByRoom(Integer roomId, Instant bookingStart, Instant bookingEnd) {
+    public RoomType findAvailableByRoom(Integer roomId,String petType, Integer petNum, Instant bookingStart, Instant bookingEnd) {
         if (roomTypeRepository.findById(roomId).isPresent()) {
             if (bookingEnd.isAfter(bookingStart)) {
-                return roomTypeRepository.findAvailableByRoom(roomId, bookingStart, bookingEnd);
+                return roomTypeRepository.findAvailableByRoom(roomId,petType, petNum, bookingStart, bookingEnd);
             } else {
                 throw new ApiBadRequestException("Booking Date Error. Please check your select date.");
             }
@@ -52,10 +52,10 @@ public class RoomTypeServiceImpl implements RoomTypeService {
             throw new ApiNotFoundException("Can't find Room Id: " + roomId);
     }
 
-    public List<RoomType> findAvailableByHotelId(Integer hotelId, Instant bookingStart, Instant bookingEnd) {
+    public List<RoomType> findAvailableByHotelId(Integer hotelId, String petType, Integer petNum, Instant bookingStart, Instant bookingEnd) {
         if(hotelRepository.findById(hotelId).isPresent()) {
             if(bookingEnd.isAfter(bookingStart)) {
-                return roomTypeRepository.findAvailableByHotelId(hotelId, bookingStart, bookingEnd);
+                return roomTypeRepository.findAvailableByHotelId(hotelId,petType, petNum, bookingStart, bookingEnd);
             }else {
                 throw new ApiBadRequestException("Wrong date selected. Please check your select date.");
             }

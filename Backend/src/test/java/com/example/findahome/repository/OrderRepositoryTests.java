@@ -44,13 +44,15 @@ public class OrderRepositoryTests {
 
         this.entityManager.persist(hotel);
         this.entityManager.persist(roomType);
-        Order order = new Order(1L, roomTypeRepository.findByRoomName("Double bed room").get(0).getId(), "test order", "0912345678", orderStartDate, orderEndDate, 1, 100, now(), now());
+        Order order = new Order(1L, roomTypeRepository.findByRoomName("Double bed room").get(0).getId(), "test order", "0912345678", orderStartDate, orderEndDate, 1, 100, "dog", 1, now(), now());
         this.entityManager.persist(order);
 
         List<Order> result = orderRepository.findByUserId(1L);
         Assert.assertFalse(result.isEmpty());
+        Assert.assertEquals("dog", result.get(0).getPetType());
         Assert.assertEquals("test order", result.get(0).getName());
         Assert.assertEquals("0912345678", result.get(0).getPhone());
+        Assert.assertEquals("dog", result.get(0).getPetType());
     }
 
     @Test
@@ -66,7 +68,7 @@ public class OrderRepositoryTests {
 
         this.entityManager.persist(hotel);
         this.entityManager.persist(roomType);
-        Order order = new Order(1L, roomTypeRepository.findByRoomName("Double bed room").get(0).getId(), "test order", "0912345678", orderStartDate, orderEndDate, 1, 100, now(), now());
+        Order order = new Order(1L, roomTypeRepository.findByRoomName("Double bed room").get(0).getId(), "test order", "0912345678", orderStartDate, orderEndDate, 1, 100, "dog", 1, now(), now());
         this.entityManager.persist(order);
 
         List<Order> result = orderRepository.findByUserId(errorUserId);
@@ -86,13 +88,15 @@ public class OrderRepositoryTests {
 
         this.entityManager.persist(hotel);
         this.entityManager.persist(roomType);
-        Order order = new Order(1L, roomTypeRepository.findByRoomName("Double bed room").get(0).getId(), "test order", "0912345678", orderStartDate, orderEndDate, 1, 100, now(), now());
+        Order order = new Order(1L, roomTypeRepository.findByRoomName("Double bed room").get(0).getId(), "test order", "0912345678", orderStartDate, orderEndDate, 1, 100, "dog", 1, now(), now());
         this.entityManager.persist(order);
 
         List<Order> result = orderRepository.findByRoomId(roomType.getId());
         Assert.assertFalse(result.isEmpty());
+        Assert.assertEquals("dog", result.get(0).getPetType());
         Assert.assertEquals("test order", result.get(0).getName());
         Assert.assertEquals("0912345678", result.get(0).getPhone());
+        Assert.assertEquals("dog", result.get(0).getPetType());
     }
 
     //findByRoomId
@@ -109,7 +113,7 @@ public class OrderRepositoryTests {
 
         this.entityManager.persist(hotel);
         this.entityManager.persist(roomType);
-        Order order = new Order(1L, roomTypeRepository.findByRoomName("Double bed room").get(0).getId(), "test order", "0912345678", orderStartDate, orderEndDate, 1, 100, now(), now());
+        Order order = new Order(1L, roomTypeRepository.findByRoomName("Double bed room").get(0).getId(), "test order", "0912345678", orderStartDate, orderEndDate, 1, 100, "dog", 1, now(), now());
         this.entityManager.persist(order);
 
         List<Order> result = orderRepository.findByRoomId(errorRoomId);
@@ -130,13 +134,15 @@ public class OrderRepositoryTests {
 
         this.entityManager.persist(hotel);
         this.entityManager.persist(roomType);
-        Order order = new Order(1L, roomTypeRepository.findByRoomName("Double bed room").get(0).getId(), "test order", "0912345678", orderStartDate, orderEndDate, 1, 100, now(), now());
+        Order order = new Order(1L, roomTypeRepository.findByRoomName("Double bed room").get(0).getId(), "test order", "0912345678", orderStartDate, orderEndDate, 1, 100, "dog", 1, now(), now());
         this.entityManager.persist(order);
 
         List<Order> orderList = orderRepository.findByHotelId(hotel.getId());
         Assert.assertFalse(orderList.isEmpty());
+        Assert.assertEquals("dog", orderList.get(0).getPetType());
         Assert.assertEquals("test order", orderList.get(0).getName());
         Assert.assertEquals("0912345678", orderList.get(0).getPhone());
+        Assert.assertEquals("dog", orderList.get(0).getPetType());
     }
 
     @Test
@@ -152,7 +158,7 @@ public class OrderRepositoryTests {
 
         this.entityManager.persist(hotel);
         this.entityManager.persist(roomType);
-        Order order = new Order(1L, roomTypeRepository.findByRoomName("Double bed room").get(0).getId(), "test order", "0912345678", orderStartDate, orderEndDate, 1, 100, now(), now());
+        Order order = new Order(1L, roomTypeRepository.findByRoomName("Double bed room").get(0).getId(), "test order", "0912345678", orderStartDate, orderEndDate, 1, 100, "dog", 1, now(), now());
         this.entityManager.persist(order);
 
         List<Order> orderList = orderRepository.findByHotelId(errorHotelId);

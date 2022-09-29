@@ -43,4 +43,17 @@ public class UserOrderDto {
      */
     @NotNull
     private Integer cost;
+
+    /**
+     * 寵物種類
+     */
+    @NotBlank
+    private String petType;
+
+    /**
+     * 寵物數量
+     */
+    @NotNull
+    private Integer petNum;
+
 }

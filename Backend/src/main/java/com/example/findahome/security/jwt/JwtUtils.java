@@ -18,9 +18,9 @@ public class JwtUtils {
 
     private static final Logger logger = LoggerFactory.getLogger(JwtUtils.class);
 
-    @Value("${bezkoder.app.jwtSecret}")
+    @Value("${app.jwtSecret}")
     private String jwtSecret;
-    @Value("${bezkoder.app.jwtExpirationMs}")
+    @Value("${app.jwtExpirationMs}")
     private int jwtExpirationMs;
 
     /**
@@ -35,7 +35,6 @@ public class JwtUtils {
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(new Date().getTime() + jwtExpirationMs))
                 .signWith(Keys.hmacShaKeyFor(Decoders.BASE64.decode(jwtSecret)),SignatureAlgorithm.HS512)
-//deprecate                .signWith(SignatureAlgorithm.HS512, jwtSecret)
                 .compact();
     }
 

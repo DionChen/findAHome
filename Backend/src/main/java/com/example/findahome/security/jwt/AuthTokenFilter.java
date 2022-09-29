@@ -37,6 +37,7 @@ public class AuthTokenFilter extends OncePerRequestFilter {
                 UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
                         userDetails, null, userDetails.getAuthorities());
                 authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+                //建立一個新的authentication 並匯入SecurityContextHolder中
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             }
         } catch (Exception e) {

@@ -37,7 +37,7 @@ public class OrderServiceImpl implements OrderService {
     public Order create(Order order) {
         if (roomTypeRepository.findById(order.getRoomId()).isPresent()) {
             //check room is exist
-            if (roomTypeRepository.findAvailableByRoom(order.getRoomId(), order.getStartDate(), order.getEndDate()) != null) {
+            if (roomTypeRepository.findAvailableByRoom(order.getRoomId(), order.getPetType(), order.getPetNum(), order.getStartDate(), order.getEndDate()) != null) {
                 //check available
                 return orderRepository.save(order);
             } else {

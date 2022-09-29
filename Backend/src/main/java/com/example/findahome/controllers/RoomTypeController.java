@@ -48,9 +48,9 @@ public class RoomTypeController {
 
     //get available room by hotelId
     @GetMapping("/available/{hotelId}")
-    public ResponseEntity<List<RoomType>> getAvailableRoom(@PathVariable Integer hotelId, @RequestParam Instant startDate, @RequestParam Instant endDate) {
+    public ResponseEntity<List<RoomType>> getAvailableRoom(@PathVariable Integer hotelId,@RequestParam String petType, @RequestParam Integer petNum, @RequestParam Instant startDate, @RequestParam Instant endDate) {
 
-        return ResponseEntity.ok(roomTypeService.findAvailableByHotelId(hotelId, startDate, endDate));
+        return ResponseEntity.ok(roomTypeService.findAvailableByHotelId(hotelId,petType, petNum, startDate, endDate));
     }
 
     //get room List by hotelId

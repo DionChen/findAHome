@@ -74,6 +74,8 @@ public class RoomTypeRepositoryTests {
         Hotel hotel = new Hotel("TestHotel2", 1L,"test address", 4.5, "test hotel 2","table;chair");
         this.entityManager.persist(hotel);
         Map<String, Integer> pets = new HashMap<>();
+        String petType = "dog";
+        Integer petNum = 1;
         pets.put("dog", 2);
         pets.put("cate", 3);
         this.entityManager.persist(new RoomType(hotel, "Double bed room", 100.0, 0.8, 100, pets, 1, now, now));
@@ -82,11 +84,11 @@ public class RoomTypeRepositoryTests {
         Instant orderEndDate = Instant.parse("2022-09-03T00:00:00.00Z");
         Instant vacancyStartDate = Instant.parse("2022-09-04T00:00:00.00Z");
         Instant vacancyEndDate = Instant.parse("2022-09-05T00:00:00.00Z");
-        this.entityManager.persist(new com.example.findahome.models.po.Order(123L, searchRoom.getId(), "test order", "0912345678", orderStartDate, orderEndDate, 1, 100, now, now));
-        RoomType busyRoom = roomTypeRepository.findAvailableByRoom(searchRoom.getId(), orderStartDate, orderEndDate);
+        this.entityManager.persist(new com.example.findahome.models.po.Order(123L, searchRoom.getId(), "test order", "0912345678", orderStartDate, orderEndDate, 1, 100, "dog", 1, now, now));
+        RoomType busyRoom = roomTypeRepository.findAvailableByRoom(searchRoom.getId(), petType, petNum, orderStartDate, orderEndDate);
         Assert.assertNull(busyRoom);
 
-        RoomType vacancyRoom = roomTypeRepository.findAvailableByRoom(searchRoom.getId(), vacancyStartDate, vacancyEndDate);
+        RoomType vacancyRoom = roomTypeRepository.findAvailableByRoom(searchRoom.getId(), petType, petNum, vacancyStartDate, vacancyEndDate);
         Assert.assertNotNull(vacancyRoom);
 
     }
@@ -98,7 +100,9 @@ public class RoomTypeRepositoryTests {
         Hotel hotel = new Hotel("TestHotel2", 1L,"test address", 4.5, "test hotel 2","table;chair");
         this.entityManager.persist(hotel);
         Map<String, Integer> pets = new HashMap<>();
-        pets.put("dog", 2);
+        String petType = "dog";
+        Integer petNum = 3;
+        pets.put("dog", 10);
         pets.put("cate", 3);
         this.entityManager.persist(new RoomType(hotel, "Double bed room", 100.0, 0.8, 100, pets, 1, now, now));
         RoomType searchRoom = roomTypeRepository.findByRoomName("Double bed room").get(0);
@@ -106,12 +110,12 @@ public class RoomTypeRepositoryTests {
         Instant orderEndDate = Instant.parse("2022-09-03T00:00:00.00Z");
         Instant vacancyStartDate = Instant.parse("2022-09-04T00:00:00.00Z");
         Instant vacancyEndDate = Instant.parse("2022-09-05T00:00:00.00Z");
-        this.entityManager.persist(new com.example.findahome.models.po.Order(123L, searchRoom.getId(), "test order", "0912345678", orderStartDate, orderEndDate, 1, 100, now, now));
-        List<RoomType> busyRoom = roomTypeRepository.findAvailableByHotelId(hotel.getId(), orderStartDate, orderEndDate);
+        this.entityManager.persist(new com.example.findahome.models.po.Order(123L, searchRoom.getId(), "test order", "0912345678", orderStartDate, orderEndDate, 1, 100, "dog", 1, now, now));
+        List<RoomType> busyRoom = roomTypeRepository.findAvailableByHotelId(hotel.getId(),petType, petNum, orderStartDate, orderEndDate);
 
         Assert.assertTrue(busyRoom.isEmpty());
 
-        List<RoomType> vacancyRoom = roomTypeRepository.findAvailableByHotelId(hotel.getId(), vacancyStartDate, vacancyEndDate);
+        List<RoomType> vacancyRoom = roomTypeRepository.findAvailableByHotelId(hotel.getId(),petType, petNum, vacancyStartDate, vacancyEndDate);
         Assert.assertFalse(vacancyRoom.isEmpty());
 
     }
