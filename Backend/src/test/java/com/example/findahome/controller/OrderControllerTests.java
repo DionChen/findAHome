@@ -63,7 +63,6 @@ public class OrderControllerTests {
     @Test
     public void createOrder() throws Exception {
 
-
         UserOrderDto orderBody = new UserOrderDto();
         orderBody.setRoomId(1);
         orderBody.setName("test");
@@ -71,6 +70,8 @@ public class OrderControllerTests {
         orderBody.setStartDate(Instant.now().toString());
         orderBody.setEndDate(Instant.now().toString());
         orderBody.setCost(1000);
+        orderBody.setPetType("dog");
+        orderBody.setPetNum(1);
         when(orderService.create(any(Order.class))).thenReturn(new Order());
         this.mockMvc.perform(post("/order")
                         .principal(new UsernamePasswordAuthenticationToken(new User(), null))
@@ -88,7 +89,7 @@ public class OrderControllerTests {
         UpdateOrderDto data = new UpdateOrderDto();
         data.setPhone(phone);
         data.setName(name);
-        when(orderService.findOneAndUpdate(any(UpdateOrderDto.class), eq(orderId))).thenReturn(new Order(123L, 100, name, phone, Instant.now(), Instant.now(), OrderStatus.UNPAID.getStatusNum(), 100, now, now));
+        when(orderService.findOneAndUpdate(any(UpdateOrderDto.class), eq(orderId))).thenReturn(new Order(123L, 100, name, phone, Instant.now(), Instant.now(), OrderStatus.UNPAID.getStatusNum(), 100, "dog", 1, now, now));
         this.mockMvc.perform(put("/order/" + orderId)
                         .principal(new UsernamePasswordAuthenticationToken(new User(), null))
                         .content(mapper.writeValueAsString(data))
@@ -98,7 +99,9 @@ public class OrderControllerTests {
                 .andExpect(jsonPath("$.name").value(name))
                 .andExpect(jsonPath("$.phone").value(phone))
                 .andExpect(jsonPath("$.status").value(OrderStatus.UNPAID.getStatusNum()))
-                .andExpect(jsonPath("$.cost").value(100));
+                .andExpect(jsonPath("$.cost").value(100))
+                .andExpect(jsonPath("$.petType").value("dog"))
+                .andExpect(jsonPath("$.petNum").value(1));
     }
 
     //get All orderList
@@ -107,7 +110,7 @@ public class OrderControllerTests {
         Instant startDate = new Date().toInstant();
         Instant endDate = new Date().toInstant();
         Date createdDate = new Date();
-        Order order = new Order(123L, 123, "test order", "0912345678", startDate, endDate, 1, 100, createdDate, createdDate
+        Order order = new Order(123L, 123, "test order", "0912345678", startDate, endDate, 1, 100, "dog", 1, createdDate, createdDate
         );
         List<Order> orderList = new ArrayList<>();
         orderList.add(order);
@@ -127,7 +130,7 @@ public class OrderControllerTests {
         Instant startDate = new Date().toInstant();
         Instant endDate = new Date().toInstant();
         Date createdDate = new Date();
-        Order order = new Order(123L, 123, "test order", "0912345678", startDate, endDate, 1, 100, createdDate, createdDate
+        Order order = new Order(123L, 123, "test order", "0912345678", startDate, endDate, 1, 100, "dog", 1, createdDate, createdDate
         );
         List<Order> orderList = new ArrayList<>();
         orderList.add(order);
@@ -138,7 +141,8 @@ public class OrderControllerTests {
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].name").value(order.getName()))
-                .andExpect(jsonPath("$[0].phone").value(order.getPhone()));
+                .andExpect(jsonPath("$[0].phone").value(order.getPhone()))
+                .andExpect(jsonPath("$[0].petType").value("dog"));
 
     }
 
@@ -149,7 +153,7 @@ public class OrderControllerTests {
         Instant startDate = new Date().toInstant();
         Instant endDate = new Date().toInstant();
         Date createdDate = new Date();
-        Order order = new Order(123L, 123, "test order", "0912345678", startDate, endDate, 1, 100, createdDate, createdDate
+        Order order = new Order(123L, 123, "test order", "0912345678", startDate, endDate, 1, 100, "dog", 1, createdDate, createdDate
         );
         List<Order> orderList = new ArrayList<>();
         orderList.add(order);
@@ -160,7 +164,9 @@ public class OrderControllerTests {
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].name").value(order.getName()))
-                .andExpect(jsonPath("$[0].phone").value(order.getPhone()));
+                .andExpect(jsonPath("$[0].phone").value(order.getPhone()))
+                .andExpect(jsonPath("$[0].petType").value("dog"));
+
     }
 
     //get Order List By room Id
@@ -170,7 +176,7 @@ public class OrderControllerTests {
         Instant startDate = new Date().toInstant();
         Instant endDate = new Date().toInstant();
         Date createdDate = new Date();
-        Order order = new Order(123L, 123, "test order", "0912345678", startDate, endDate, 1, 100, createdDate, createdDate
+        Order order = new Order(123L, 123, "test order", "0912345678", startDate, endDate, 1, 100, "dog", 1, createdDate, createdDate
         );
         List<Order> orderList = new ArrayList<>();
         orderList.add(order);
@@ -181,9 +187,30 @@ public class OrderControllerTests {
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].name").value(order.getName()))
-                .andExpect(jsonPath("$[0].phone").value(order.getPhone()));
+                .andExpect(jsonPath("$[0].phone").value(order.getPhone()))
+                .andExpect(jsonPath("$[0].petType").value("dog"));
+
     }
 
 
     //soft delete order
+    @Test
+    public void softDeleteOrder() throws Exception {
+        Integer orderId = 999;
+        Instant startDate = new Date().toInstant();
+        Instant endDate = new Date().toInstant();
+        Date createdDate = new Date();
+        Order order = new Order(123L, 123, "test order", "0912345678", startDate, endDate, OrderStatus.DELETE.getStatusNum(), 100, "dog", 1, createdDate, createdDate
+        );
+        when(orderService.softDelete(orderId)).thenReturn(order);
+
+        this.mockMvc.perform(put("/order/delete/" + orderId)
+                        .principal(new UsernamePasswordAuthenticationToken(new User(), null))
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.name").value(order.getName()))
+                .andExpect(jsonPath("$.phone").value(order.getPhone()))
+                .andExpect(jsonPath("$.status").value(OrderStatus.DELETE.getStatusNum()))
+                .andExpect(jsonPath("$.petType").value("dog"));
+    }
 }

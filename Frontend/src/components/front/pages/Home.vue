@@ -191,7 +191,7 @@ export default class Home extends Vue {
 }
 .banner .title p {
   font-family: "微软雅黑";
-  color: #303030;
+  color: #ffa230;
   font-size: 50px;
   width: 100%;
   position: absolute;

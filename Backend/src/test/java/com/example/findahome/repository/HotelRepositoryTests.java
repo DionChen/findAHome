@@ -95,7 +95,7 @@ public class HotelRepositoryTests {
         Instant orderEndDate = Instant.parse("2022-09-10T00:00:00.00Z");
         this.entityManager.persist(hotel);
         this.entityManager.persist(roomType);
-        Order order = new Order(1L,roomTypeRepository.findByRoomName("Double bed room").get(0).getId(), "test order", "0912345678", orderStartDate, orderEndDate, 1, 100, now(), now());
+        Order order = new Order(1L,roomTypeRepository.findByRoomName("Double bed room").get(0).getId(), "test order", "0912345678", orderStartDate, orderEndDate, 1, 100,petType, petNum, now(), now());
         this.entityManager.persist(order);
         List<Hotel> hotelList = hotelRepository.findAvailableHotel(keyword, petType, petNum, searchStartDate, searchEndDate);
         Assert.assertNotNull(hotelList);
@@ -125,7 +125,7 @@ public class HotelRepositoryTests {
         Instant orderEndDate = Instant.parse("2022-09-10T00:00:00.00Z");
         this.entityManager.persist(hotel);
         this.entityManager.persist(roomType);
-        Order order = new Order(1L,roomTypeRepository.findByRoomName("Double bed room").get(0).getId(), "test order", "0912345678", orderStartDate, orderEndDate, 1, 100, now(), now());
+        Order order = new Order(1L,roomTypeRepository.findByRoomName("Double bed room").get(0).getId(), "test order", "0912345678", orderStartDate, orderEndDate, 1, 100,petType, petNum, now(), now());
         this.entityManager.persist(order);
         List<Hotel> hotelList = hotelRepository.findAvailableHotel(keyword, petType, petNum, searchStartDate, searchEndDate);
         Assert.assertTrue(hotelList.isEmpty());
@@ -152,7 +152,7 @@ public class HotelRepositoryTests {
         Instant orderEndDate = Instant.parse("2022-09-10T00:00:00.00Z");
         this.entityManager.persist(hotel);
         this.entityManager.persist(roomType);
-        Order order = new Order(1L,roomTypeRepository.findByRoomName("Double bed room").get(0).getId(), "test order", "0912345678", orderStartDate, orderEndDate, 1, 100, now(), now());
+        Order order = new Order(1L,roomTypeRepository.findByRoomName("Double bed room").get(0).getId(), "test order", "0912345678", orderStartDate, orderEndDate, 1, 100,petType, petNum, now(), now());
         this.entityManager.persist(order);
         List<Hotel> hotelList = hotelRepository.findAvailableHotel(keyword, petType, petNum, searchStartDate, searchEndDate);
         Assert.assertTrue(hotelList.isEmpty());
@@ -177,7 +177,7 @@ public class HotelRepositoryTests {
         Instant orderEndDate = Instant.parse("2022-09-10T00:00:00.00Z");
         this.entityManager.persist(hotel);
         this.entityManager.persist(roomType);
-        Order order = new Order(1L,roomTypeRepository.findByRoomName("Double bed room").get(0).getId(), "test order", "0912345678", orderStartDate, orderEndDate, 1, 100, now(), now());
+        Order order = new Order(1L,roomTypeRepository.findByRoomName("Double bed room").get(0).getId(), "test order", "0912345678", orderStartDate, orderEndDate, 1, 100,petType, petNum, now(), now());
         this.entityManager.persist(order);
         List<Hotel> hotelList = hotelRepository.findAvailableHotel(keyword, petType, petNum, searchStartDate, searchEndDate);
         Assert.assertTrue(hotelList.isEmpty());
@@ -202,7 +202,7 @@ public class HotelRepositoryTests {
         Instant orderEndDate = Instant.parse("2022-09-10T00:00:00.00Z");
         this.entityManager.persist(hotel);
         this.entityManager.persist(roomType);
-        Order order = new Order(1L,roomTypeRepository.findByRoomName("Double bed room").get(0).getId(), "test order", "0912345678", orderStartDate, orderEndDate, 1, 100, now(), now());
+        Order order = new Order(1L,roomTypeRepository.findByRoomName("Double bed room").get(0).getId(), "test order", "0912345678", orderStartDate, orderEndDate, 1, 100,petType, petNum, now(), now());
         this.entityManager.persist(order);
         List<Hotel> hotelList = hotelRepository.findAvailableHotel(keyword, petType, petNum, searchStartDate, searchEndDate);
         Assert.assertTrue(hotelList.isEmpty());

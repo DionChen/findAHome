@@ -66,18 +66,29 @@ public class Order {
     private Integer cost;
 
     /**
+     * 寵物種類
+     */
+    @NotBlank
+    private String petType;
+
+    /**
+     * 寵物數量
+     */
+    @NotNull
+    private Integer petNum;
+
+    /**
      * 訂單建立日期
      */
     @NotNull
     private Date createdTime;
-
     /**
      * 更新日期
      */
     @NotNull
     private Date updatedTime;
 
-    public Order(Long userId, Integer roomId, String name, String phone, Instant startDate, Instant endDate, Integer status, Integer cost, Date createdTime, Date updatedTime) {
+    public Order(Long userId, Integer roomId, String name, String phone, Instant startDate, Instant endDate, Integer status, Integer cost,String petType, Integer petNum, Date createdTime, Date updatedTime) {
         this.userId = userId;
         this.roomId = roomId;
         this.name = name;
@@ -86,6 +97,8 @@ public class Order {
         this.endDate = endDate;
         this.status = status;
         this.cost = cost;
+        this.petType = petType;
+        this.petNum = petNum;
         this.createdTime = createdTime;
         this.updatedTime = updatedTime;
     }

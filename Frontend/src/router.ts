@@ -25,7 +25,7 @@ const routes: Array<RouteConfig> = [
     component: Register
   },
   {
-    path: 'console/profile',
+    path: '/console/profile',
     name: 'profile',
     // lazy-loaded
     component: () => import('./components/backstage/pages/Profile.vue')
@@ -44,11 +44,16 @@ const routes: Array<RouteConfig> = [
     path: 'console/user',
     name: 'user',
     component: () => import('./components/backstage/pages/BoardUser.vue')
-  }
+  },
+  { 
+    path: '/:pathMatch(.*)*',
+     name: 'NotFound',
+    component: Home },
+
 ];
 
 const router = new VueRouter({
-  mode: "history",
+  // mode: "history",
   base: process.env.BASE_URL,
   routes
 });

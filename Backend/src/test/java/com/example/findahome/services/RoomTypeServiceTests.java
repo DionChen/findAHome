@@ -97,14 +97,16 @@ public class RoomTypeServiceTests {
         Instant bookingEnd = Instant.parse("2022-09-04T00:00:00.00Z");
         Hotel hotel = new Hotel("TestHotel", 1L, "test address", 4.5, "test hotel 2", "table;chair");
         Map<String, Integer> pets = new HashMap<>();
+        String petType = "dog";
+        Integer petNum = 1;
         pets.put("dog", 2);
         RoomType newRoomType = new RoomType( hotel, "Double bed room", 100.0, 0.8, 100, pets, 1, now(), now());
 
 
         when(roomTypeRepository.findById(eq(roomId))).thenReturn(Optional.of(new RoomType()));
-        when(roomTypeRepository.findAvailableByRoom(roomId, bookingStart, bookingEnd)).thenReturn(newRoomType);
+        when(roomTypeRepository.findAvailableByRoom(roomId, petType, petNum, bookingStart, bookingEnd)).thenReturn(newRoomType);
 
-        RoomType availableRoom = roomTypeService.findAvailableByRoom(roomId, bookingStart, bookingEnd);
+        RoomType availableRoom = roomTypeService.findAvailableByRoom(roomId, petType, petNum, bookingStart, bookingEnd);
 
         Assert.assertNotNull(availableRoom);
         Assert.assertEquals("Double bed room", availableRoom.getRoomName());
@@ -117,7 +119,7 @@ public class RoomTypeServiceTests {
         Instant bookingEnd = Instant.parse("2022-09-04T00:00:00.00Z");
 
 
-        Exception roomNotFoundErrorMessage = Assert.assertThrows(ApiNotFoundException.class, () -> roomTypeService.findAvailableByRoom(errorRoomId, bookingStart, bookingEnd));
+        Exception roomNotFoundErrorMessage = Assert.assertThrows(ApiNotFoundException.class, () -> roomTypeService.findAvailableByRoom(errorRoomId,"dog", 1, bookingStart, bookingEnd));
         Assert.assertEquals("Can't find Room Id: " + errorRoomId, roomNotFoundErrorMessage.getMessage());
     }
 
@@ -130,13 +132,15 @@ public class RoomTypeServiceTests {
 
         when(roomTypeRepository.findById(eq(roomId))).thenReturn(Optional.of(new RoomType()));
 
-        Exception dateErrorMessage = Assert.assertThrows(ApiBadRequestException.class, () -> roomTypeService.findAvailableByRoom(roomId, errorBookingStart, errorBookingEnd));
+        Exception dateErrorMessage = Assert.assertThrows(ApiBadRequestException.class, () -> roomTypeService.findAvailableByRoom(roomId,"dog", 1, errorBookingStart, errorBookingEnd));
         Assert.assertEquals("Booking Date Error. Please check your select date.", dateErrorMessage.getMessage());
     }
 
     @Test
     public void findAvailableRoomByHotelId() {
         Integer hotelId = 100;
+        String petType = "dog";
+        Integer petNum = 1;
         Instant bookingStart = Instant.parse("2022-09-01T00:00:00.00Z");
         Instant bookingEnd = Instant.parse("2022-09-04T00:00:00.00Z");
         Hotel hotel = new Hotel("TestHotel", 1L, "test address", 4.5, "test hotel 2", "table;chair");
@@ -147,9 +151,9 @@ public class RoomTypeServiceTests {
         roomList.add(newRoomType);
 
         when(hotelRepository.findById(eq(hotelId))).thenReturn(Optional.of(new Hotel()));
-        when(roomTypeRepository.findAvailableByHotelId(hotelId, bookingStart, bookingEnd)).thenReturn(roomList);
+        when(roomTypeRepository.findAvailableByHotelId(hotelId,petType, petNum, bookingStart, bookingEnd)).thenReturn(roomList);
 
-        List<RoomType> availableRoom = roomTypeService.findAvailableByHotelId(hotelId, bookingStart, bookingEnd);
+        List<RoomType> availableRoom = roomTypeService.findAvailableByHotelId(hotelId,petType, petNum, bookingStart, bookingEnd);
 
 
 
@@ -160,6 +164,8 @@ public class RoomTypeServiceTests {
     @Test
     public void findAvailableRoomByHotelIdWithErrorHotelId() {
         Integer hotelId = 100;
+        String petType = "dog";
+        Integer petNum = 1;
         Integer errorHotelId = 1000;
         Instant bookingStart = Instant.parse("2022-09-01T00:00:00.00Z");
         Instant bookingEnd = Instant.parse("2022-09-04T00:00:00.00Z");
@@ -171,16 +177,18 @@ public class RoomTypeServiceTests {
         roomList.add(newRoomType);
 
         when(hotelRepository.findById(eq(hotelId))).thenReturn(Optional.of(new Hotel()));
-        when(roomTypeRepository.findAvailableByHotelId(hotelId, bookingStart, bookingEnd)).thenReturn(roomList);
+        when(roomTypeRepository.findAvailableByHotelId(hotelId,petType, petNum, bookingStart, bookingEnd)).thenReturn(roomList);
 
 
-        Exception roomNotFoundErrorMessage = Assert.assertThrows(ApiNotFoundException.class, () -> roomTypeService.findAvailableByHotelId(errorHotelId, bookingStart, bookingEnd));
+        Exception roomNotFoundErrorMessage = Assert.assertThrows(ApiNotFoundException.class, () -> roomTypeService.findAvailableByHotelId(errorHotelId,petType, petNum, bookingStart, bookingEnd));
         Assert.assertEquals("Can't find hotel Id: " + errorHotelId, roomNotFoundErrorMessage.getMessage());
 
     }
 
     @Test
     public void findAvailableRoomByHotelIdWithErrorDate() {
+        String petType = "dog";
+        Integer petNum = 1;
         Integer hotelId = 100;
         Instant bookingStart = Instant.parse("2022-09-01T00:00:00.00Z");
         Instant bookingEnd = Instant.parse("2022-09-04T00:00:00.00Z");
@@ -195,9 +203,9 @@ public class RoomTypeServiceTests {
         roomList.add(newRoomType);
 
         when(hotelRepository.findById(eq(hotelId))).thenReturn(Optional.of(new Hotel()));
-        when(roomTypeRepository.findAvailableByHotelId(hotelId, bookingStart, bookingEnd)).thenReturn(roomList);
+        when(roomTypeRepository.findAvailableByHotelId(hotelId,petType, petNum, bookingStart, bookingEnd)).thenReturn(roomList);
 
-        Exception roomBadRequestErrorMessage = Assert.assertThrows(ApiBadRequestException.class, () -> roomTypeService.findAvailableByHotelId(hotelId, errorBookingStart, errorBookingEnd));
+        Exception roomBadRequestErrorMessage = Assert.assertThrows(ApiBadRequestException.class, () -> roomTypeService.findAvailableByHotelId(hotelId, petType, petNum, errorBookingStart, errorBookingEnd));
         Assert.assertEquals("Wrong date selected. Please check your select date." , roomBadRequestErrorMessage.getMessage());
     }
 

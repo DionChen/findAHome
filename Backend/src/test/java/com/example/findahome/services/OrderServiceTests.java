@@ -50,28 +50,31 @@ public class OrderServiceTests {
 
     @Test
     public void createOrder() {
+        String petType = "dog";
+        Integer petNum = 1;
         Instant startDate = new Date().toInstant();
         Instant endDate = new Date().toInstant();
         Instant InvalidStartDate = Instant.parse("2022-09-04T00:00:00.00Z");
         Instant InvalidEndDate = Instant.parse("2022-09-05T00:00:00.00Z");
         Date createdDate = new Date();
-        Order successOrder = new Order(123L, 123, "test order", "0912345678", startDate, endDate, 1, 100, createdDate, createdDate
+        Order successOrder = new Order(123L, 123, "test order", "0912345678", startDate, endDate, 1, 100, petType, petNum, createdDate, createdDate
         );
-        Order invalidRoomIdOrder = new Order(123L, 1234, "error order", "0912345678", startDate, endDate, 1, 100, createdDate, createdDate
+        Order invalidRoomIdOrder = new Order(123L, 1234, "error order", "0912345678", startDate, endDate, 1, 100, petType, petNum, createdDate, createdDate
         );
-        Order noAvailableOrder = new Order(123L, 123, "error order", "0912345678", InvalidStartDate, InvalidEndDate, 1, 100, createdDate, createdDate
+        Order noAvailableOrder = new Order(123L, 123, "error order", "0912345678", InvalidStartDate, InvalidEndDate, 1, 100, petType, petNum, createdDate, createdDate
 
         );
         when(roomTypeRepository.findById(123)).thenReturn(java.util.Optional.of(new RoomType()));
-        when(roomTypeRepository.findAvailableByRoom(successOrder.getRoomId(), successOrder.getStartDate(), successOrder.getEndDate())).thenReturn(new RoomType());
+        when(roomTypeRepository.findAvailableByRoom(successOrder.getRoomId(), petType, petNum, successOrder.getStartDate(), successOrder.getEndDate())).thenReturn(new RoomType());
         when(roomTypeRepository.findById(1234)).thenReturn(Optional.empty());
-        when(roomTypeRepository.findAvailableByRoom(noAvailableOrder.getRoomId(), noAvailableOrder.getStartDate(), noAvailableOrder.getEndDate())).thenReturn(null);
+        when(roomTypeRepository.findAvailableByRoom(noAvailableOrder.getRoomId(), petType, petNum, noAvailableOrder.getStartDate(), noAvailableOrder.getEndDate())).thenReturn(null);
         when(orderRepository.save(successOrder)).thenReturn(successOrder);
 
         Order order = orderService.create(successOrder);
         Assert.assertNotNull(order);
         Assert.assertEquals("test order", order.getName());
         Assert.assertEquals("0912345678", order.getPhone());
+        Assert.assertEquals("dog", order.getPetType());
         Exception roomIdErrorMessage = Assert.assertThrows(ApiNotFoundException.class, () -> orderService.create(invalidRoomIdOrder));
         Assert.assertEquals("Could not find the room with id =" + invalidRoomIdOrder.getRoomId(), roomIdErrorMessage.getMessage());
         Exception roomUnavailableErrorMessage = Assert.assertThrows(ApiNotFoundException.class, () -> orderService.create(noAvailableOrder));
@@ -85,10 +88,11 @@ public class OrderServiceTests {
         Integer orderId = 100;
         UpdateOrderDto data = new UpdateOrderDto();
         when(orderRepository.findById(orderId)).thenReturn(Optional.of(new Order()));
-        when(orderRepository.save(any(Order.class))).thenReturn(new Order(123L, 100, "test", "0987654321", Instant.now(), Instant.now(), OrderStatus.UNPAID.getStatusNum(),100, now, now));
+        when(orderRepository.save(any(Order.class))).thenReturn(new Order(123L, 100, "test", "0987654321", Instant.now(), Instant.now(), OrderStatus.UNPAID.getStatusNum(),100, "dog", 1, now, now));
         Order updateOrder = orderService.findOneAndUpdate(data, orderId);
         Assert.assertNotNull(updateOrder);
         Assert.assertEquals("test", updateOrder.getName());
+        Assert.assertEquals("dog", updateOrder.getPetType());
         Assert.assertEquals("0987654321", updateOrder.getPhone());
 
     }
@@ -100,7 +104,7 @@ public class OrderServiceTests {
         Integer errorOrderId = 1000;
         UpdateOrderDto data = new UpdateOrderDto();
         when(orderRepository.findById(orderId)).thenReturn(Optional.of(new Order()));
-        when(orderRepository.save(any(Order.class))).thenReturn(new Order(123L, 100, "test", "0987654321", Instant.now(), Instant.now(), OrderStatus.UNPAID.getStatusNum(),100, now, now));
+        when(orderRepository.save(any(Order.class))).thenReturn(new Order(123L, 100, "test", "0987654321", Instant.now(), Instant.now(), OrderStatus.UNPAID.getStatusNum(),100, "dog", 1, now, now));
        Exception invalidOrderIdMessage = Assert.assertThrows( ApiNotFoundException.class, () -> orderService.findOneAndUpdate(data, errorOrderId));
        Assert.assertEquals("Could not find the Order with id =" + errorOrderId, invalidOrderIdMessage.getMessage());
     }
@@ -109,10 +113,11 @@ public class OrderServiceTests {
     public void updateOrderStatus() {
         Date now = new Date();
         when(orderRepository.findById(1000)).thenReturn(Optional.of(new Order()));
-        when(orderRepository.save(any(Order.class))).thenReturn(new Order(123L, 100, "test", "0987654321", Instant.now(), Instant.now(), OrderStatus.UNPAID.getStatusNum(),100, now, now));
+        when(orderRepository.save(any(Order.class))).thenReturn(new Order(123L, 100, "test", "0987654321", Instant.now(), Instant.now(), OrderStatus.UNPAID.getStatusNum(),100, "dog", 1, now, now));
         Order updateOrder = orderService.updateOrderStatus(OrderStatus.CANCELLATION.getStatusNum(), 1000);
         Assert.assertNotNull(updateOrder);
         Assert.assertEquals("test", updateOrder.getName());
+        Assert.assertEquals("dog", updateOrder.getPetType());
         Assert.assertEquals("0987654321", updateOrder.getPhone());
 
     }
@@ -122,7 +127,7 @@ public class OrderServiceTests {
         Date now = new Date();
         Integer errorOrderId = 100;
         when(orderRepository.findById(1000)).thenReturn(Optional.of(new Order()));
-        when(orderRepository.save(any(Order.class))).thenReturn(new Order(123L, 100, "test", "0987654321", Instant.now(), Instant.now(), OrderStatus.UNPAID.getStatusNum(),100, now, now));
+        when(orderRepository.save(any(Order.class))).thenReturn(new Order(123L, 100, "test", "0987654321", Instant.now(), Instant.now(), OrderStatus.UNPAID.getStatusNum(),100, "dog", 1, now, now));
 
         Exception invalidOrderIdMessage = Assert.assertThrows( ApiNotFoundException.class, () -> orderService.updateOrderStatus(OrderStatus.CANCELLATION.getStatusNum(), errorOrderId));
         Assert.assertEquals("Could not find the Order with id =" + errorOrderId, invalidOrderIdMessage.getMessage());
@@ -132,6 +137,7 @@ public class OrderServiceTests {
     @Test
     public void softDeleteOrder() {
         when(orderRepository.findById(123)).thenReturn(Optional.of(new Order()));
+        when(orderRepository.save(any(Order.class))).thenReturn(new Order());
         Order successOrder = orderService.softDelete(123);
         Assert.assertNotNull(successOrder);
         Exception invalidOrderIdMessage = Assert.assertThrows(ApiNotFoundException.class, () -> orderService.softDelete(123123));

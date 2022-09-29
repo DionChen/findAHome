@@ -25,10 +25,10 @@ public class OrderTests {
      */
     @Test
     public void createOrder() {
-        Instant startDate = new Date().toInstant();
-        Instant endDate = new Date().toInstant();
+        Instant startDate = Instant.parse("2022-09-04T00:00:00.00Z");
+        Instant endDate = Instant.parse("2022-09-06T00:00:00.00Z");
         Date createdDate = new Date();
-        Order newOrder = new Order(123L, 123, "test order", "0912345678", startDate, endDate, 1, 100, createdDate, createdDate
+        Order newOrder = new Order(123L, 35, "test order", "0912345678", startDate, endDate, 1, 100, "dog", 1, createdDate, createdDate
         );
         orderRepository.save(newOrder);
         Order goalOrder = orderRepository.findByUserId(123L).get(0);
@@ -41,8 +41,8 @@ public class OrderTests {
         Assert.assertEquals(createdDate, goalOrder.getUpdatedTime());
     }
 
-    @After
-    public void clean() {
-        orderRepository.deleteAll();
-    }
+//    @After
+//    public void clean() {
+//        orderRepository.deleteAll();
+//    }
 }

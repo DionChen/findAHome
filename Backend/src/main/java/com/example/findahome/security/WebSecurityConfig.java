@@ -19,12 +19,15 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 
 @Configuration
+//component this class
 @EnableWebSecurity
+//allows Spring to find and automatically apply the class to the global Web Security.
 @EnableGlobalMethodSecurity(
         // securedEnabled = true,
         // jsr250Enabled = true,
         prePostEnabled = true
 )
+//provides AOP security on methods. It enables @PreAuthorize, @PostAuthorize
 public class WebSecurityConfig {
 
     @Autowired
@@ -37,6 +40,7 @@ public class WebSecurityConfig {
     public AuthTokenFilter authenticationJwtTokenFilter() {
         return new AuthTokenFilter();
     }
+    //extends OncePerRequestFilter
 
     /**
      * Since WebSecurityConfigurerAdapter deprecate.
@@ -52,7 +56,7 @@ public class WebSecurityConfig {
 //        return super.authenticationManagerBean();
 //    }
 
-
+    //驗證類別註冊容器
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
         return authenticationConfiguration.getAuthenticationManager();
@@ -62,7 +66,6 @@ public class WebSecurityConfig {
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
-
 //    @Override
 //    protected void configure(HttpSecurity http) throws Exception {
 //        http.cors().and().csrf().disable()
@@ -85,13 +88,16 @@ public class WebSecurityConfig {
     protected SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.cors().and().csrf().disable()
                 .exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
+                //關閉HttpSession的建立狀態
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
                 .authorizeHttpRequests().antMatchers("/api/auth/**").permitAll()
                 .antMatchers("/api/test/**").permitAll()
                 .antMatchers("/api/public/**").permitAll()
                 .antMatchers("/order/**").permitAll()
                 .antMatchers("/hotel/**").permitAll()
-                //先暫時用的，之後要所有user登入的才能使用
+                .antMatchers("/console").permitAll()
+                .antMatchers("/console/**").permitAll()
+                .antMatchers("/homepage").permitAll()
                 .antMatchers("/", "/favicon.ico", "/**/*.png", "/**/*.gif", "/**/*.svg", "/**/*.jpg", "/**/*.html", "/**/*.css", "/**/*.js", "**/*.woff", "/**/*.ttf").permitAll()
                 .anyRequest().authenticated();
         http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);

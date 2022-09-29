@@ -157,6 +157,8 @@ public class RoomTypeControllerTests {
     public void getAvailableRoomByhotelId() throws Exception {
         Hotel hotel = new Hotel("TestHotel", 1L, "test address", 4.5, "test hotel 2", "table;chair");
         Map<String, Integer> pets = new HashMap<>();
+        String petType = "dog";
+        Integer petNum = 1;
         pets.put("dog", 2);
 
         Integer hotelId = 100;
@@ -167,11 +169,13 @@ public class RoomTypeControllerTests {
         Instant searchStartDate = Instant.parse("2022-09-01T00:00:00.00Z");
         Instant searchEndDate = Instant.parse("2022-09-03T00:00:00.00Z");
 
-        when(roomTypeService.findAvailableByHotelId(eq(hotelId), eq(searchStartDate), eq(searchEndDate))).thenReturn(roomList);
+        when(roomTypeService.findAvailableByHotelId(eq(hotelId), eq(petType), eq(petNum), eq(searchStartDate), eq(searchEndDate))).thenReturn(roomList);
 
         this.mockMvc.perform(get("/room/available/" + hotelId)
                         .principal(new UsernamePasswordAuthenticationToken(new User(), null))
                         .contentType(MediaType.APPLICATION_JSON)
+                        .param("petType",petType)
+                        .param("petNum",petNum.toString())
                         .param("startDate", searchStartDate.toString())
                         .param("endDate", searchEndDate.toString()))
                 .andExpect(status().isOk())
