@@ -19,19 +19,27 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/order")
-//@PreAuthorize("hasRole('USER') or hasRole('HOTEL_ADMIN') or hasRole('ADMIN')")
+@PreAuthorize("hasRole('USER') or hasRole('HOTEL_ADMIN') or hasRole('ADMIN')")
 public class OrderController {
 
     @Autowired
     OrderServiceImpl orderService;
 
     @PostMapping
-    public ResponseEntity<Order> createOrder(@Valid @RequestBody UserOrderDto userOrderDto) {
+    public ResponseEntity<Order> createOrder(@Valid @RequestBody UserOrderDto userOrderDto, @AuthenticationPrincipal UserDetailsImpl user) {
         Date now = new Date();
         System.out.println(userOrderDto);
-        Order newOrder = new Order(1L, userOrderDto.getRoomId(), userOrderDto.getName(), userOrderDto.getPhone(), Instant.parse(userOrderDto.getStartDate()), Instant.parse(userOrderDto.getEndDate()), OrderStatus.UNPAID.getStatusNum(), userOrderDto.getCost(), userOrderDto.getPetType(), userOrderDto.getPetNum(), now, now);
+        Order newOrder = new Order(user.getId(), userOrderDto.getRoomId(), userOrderDto.getName(), userOrderDto.getPhone(), Instant.parse(userOrderDto.getStartDate()), Instant.parse(userOrderDto.getEndDate()), OrderStatus.UNPAID.getStatusNum(), userOrderDto.getCost(), userOrderDto.getPetType(), userOrderDto.getPetNum(), now, now);
         return ResponseEntity.ok(orderService.create(newOrder));
     }
+
+//    @PostMapping
+//    public ResponseEntity<Order> createOrder(@Valid @RequestBody UserOrderDto userOrderDto) {
+//        Date now = new Date();
+//        System.out.println(userOrderDto);
+//        Order newOrder = new Order(1L, userOrderDto.getRoomId(), userOrderDto.getName(), userOrderDto.getPhone(), Instant.parse(userOrderDto.getStartDate()), Instant.parse(userOrderDto.getEndDate()), OrderStatus.UNPAID.getStatusNum(), userOrderDto.getCost(), userOrderDto.getPetType(), userOrderDto.getPetNum(), now, now);
+//        return ResponseEntity.ok(orderService.create(newOrder));
+//    }
 
     @PutMapping("{orderId}")
     public ResponseEntity<Order> updateOrder(@Valid @RequestBody UpdateOrderDto updateOrderDto, @PathVariable Integer orderId) {
