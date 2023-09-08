@@ -2,6 +2,7 @@ package com.example.findahome.models.po;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
@@ -47,6 +48,7 @@ public class Hotel {
      * 飯店簡介
      */
     @NotBlank
+    @Type()
     private String summary;
 
     /**

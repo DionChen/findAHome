@@ -24,8 +24,9 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 //allows Spring to find and automatically apply the class to the global Web Security.
 @EnableGlobalMethodSecurity(
         // securedEnabled = true,
-        // jsr250Enabled = true,
+        // jsr250Enabled = true, -> open @RolesAllowed @DenyAll @PermitAll
         prePostEnabled = true
+        //authorize role before method running & after method running
 )
 //provides AOP security on methods. It enables @PreAuthorize, @PostAuthorize
 public class WebSecurityConfig {
@@ -88,7 +89,7 @@ public class WebSecurityConfig {
     protected SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.cors().and().csrf().disable()
                 .exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
-                //關閉HttpSession的建立狀態
+                //關閉HttpSession主動建立
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
                 .authorizeHttpRequests().antMatchers("/api/auth/**").permitAll()
                 .antMatchers("/api/test/**").permitAll()
